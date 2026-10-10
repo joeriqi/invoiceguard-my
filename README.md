@@ -6,7 +6,7 @@ phone photo), proposes structured JSON, checks it against deterministic e-invoic
 > **Prototype on synthetic data. Not tax or legal advice.** Regulatory rules are tagged `[VERIFY]` and must be confirmed against LHDN
 > guidelines and the MyInvois SDK before real use.
 
-**Live dashboard:** _add your hosted link here_ · **Narrative:** [business problem](docs/business_problem.md) → current process → bottleneck →
+**Live dashboard:** _https://joeriqi.github.io/invoiceguard-my/_ · **Narrative:** [business problem](docs/business_problem.md) → current process → bottleneck →
 AI opportunity → solution → prototype → ROI → [roadmap](docs/roadmap.md)
 
 ## Results (held-out test split, 250 synthetic invoices)
