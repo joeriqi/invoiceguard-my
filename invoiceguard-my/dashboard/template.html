@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>InvoiceGuard MY - Evaluation Dashboard</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#14181f;--mute:#5d6675;--line:#e1e5eb;--a:#1f6feb;--b:#0f9d7a;--c:#e0892b;--d:#d1453b;--e:#7c5cd6;--warn:#fff4dd;--warnt:#7a5200;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1116;--card:#171b22;--ink:#e8ecf2;--mute:#9aa4b2;--line:#283040;--a:#5b9bff;--b:#3dd6b0;--c:#f2a65a;--d:#ff7b72;--e:#a78bfa;--warn:#2b2412;--warnt:#f0cf85}}
+:root[data-theme="dark"]{--bg:#0e1116;--card:#171b22;--ink:#e8ecf2;--mute:#9aa4b2;--line:#283040;--a:#5b9bff;--b:#3dd6b0;--c:#f2a65a;--d:#ff7b72;--e:#a78bfa;--warn:#2b2412;--warnt:#f0cf85}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{padding:20px 20px 8px;max-width:1180px;margin:auto}h1{margin:0;font-size:22px}.sub{color:var(--mute);margin:2px 0 10px}
+.banner{background:var(--warn);color:var(--warnt);border-radius:8px;padding:8px 12px;font-size:12.5px}
+nav{display:flex;gap:6px;flex-wrap:wrap;max-width:1180px;margin:10px auto 0;padding:0 20px}
+nav button{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:7px 14px;border-radius:999px;cursor:pointer;font:inherit}
+nav button.on{background:var(--a);border-color:var(--a);color:#fff}
+main{max-width:1180px;margin:auto;padding:14px 20px 40px}section{display:none}section.on{display:block}
+.grid{display:grid;gap:12px}.k{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.g2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kpi b{display:block;font-size:24px}.kpi span{color:var(--mute);font-size:12px}
+h3{margin:0 0 8px;font-size:14px}.cv{position:relative;height:250px}
+.wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:640px}th,td{padding:7px 9px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--mute);font-weight:600;font-size:12px}.num{text-align:right;font-variant-numeric:tabular-nums}
+.badge{font-size:11px;padding:2px 7px;border-radius:999px;border:1px solid var(--line)}.sim{color:var(--c);border-color:var(--c)}.mea{color:var(--b);border-color:var(--b)}
+.chip{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:0 6px;margin:1px;font-size:12px}
+.ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0 10px}select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 8px}
+.sl{display:grid;grid-template-columns:150px 1fr 70px;gap:8px;align-items:center;margin:6px 0}.sl input{width:100%}.sl output{text-align:right;font-variant-numeric:tabular-nums}
+ul.ins{margin:6px 0 0;padding-left:18px}.note{color:var(--mute);font-size:12px;margin-top:8px}.bad{color:var(--d)}.good{color:var(--b)}
+textarea{width:100%;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;padding:8px}
+pre{margin:0;font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap}pre span{display:block}.dg{background:var(--amb,#fff1d6)}img.th{max-width:100%;border:1px solid var(--line);border-radius:6px}
+</style>
+</head>
+<body>
+<header>
+<h1>InvoiceGuard MY <span style="font-weight:400;color:var(--mute)">- evaluation dashboard</span></h1>
+<p class="sub">AI-assisted invoice intake and MyInvois validation for Malaysian SMEs - prototype</p>
+<div class="banner"><b>Read this first:</b> all invoices are <b>synthetic</b>. Systems A and A+ (Tesseract OCR + regex) are <b>measured</b>. Systems B and C use a <b>simulated LLM stand-in</b> with assumed error rates, not a real model run. Regulatory rules are tagged [VERIFY] against LHDN / MyInvois SDK. Not tax or legal advice.</div>
+</header>
+<nav id="tabs"></nav>
+<main>
+<section id="s0">
+<div class="grid k" id="kpis"></div>
+<div class="grid g2" style="margin-top:12px">
+<div class="card"><h3>Invoices received per month</h3><div class="cv"><canvas id="c_month"></canvas></div></div>
+<div class="card"><h3>Arrival by day of month (last 5 days highlighted)</h3><div class="cv"><canvas id="c_dom"></canvas></div></div>
+<div class="card"><h3>Invoice value, RM (log-spaced bins)</h3><div class="cv"><canvas id="c_val"></canvas></div></div>
+<div class="card"><h3>Injected error types (ground truth)</h3><div class="cv"><canvas id="c_err"></canvas></div></div>
+<div class="card"><h3>Document quality mix</h3><div class="cv"><canvas id="c_q"></canvas></div></div>
+<div class="card"><h3>Supplier concentration (cumulative share of invoices)</h3><div class="cv"><canvas id="c_par"></canvas></div></div>
+</div>
+<div class="card" style="margin-top:12px"><h3>What the EDA says</h3><ul class="ins" id="ins"></ul></div>
+</section>
+
+<section id="s1">
+<div class="card wrap"><h3>System comparison on the held-out test split</h3><table id="sys"></table>
+<p class="note">Wrong auto-approve = auto-approved although the document has an injected error, is high-value (policy: human review), or a critical field was extracted wrongly. Target: ~0. Scan/photo degradation severity is a synthetic design choice, so read the digital-vs-scan gap as direction, not magnitude. STP on error-free docs = share of clean, below-threshold documents approved with no human touch.</p></div>
+<div class="grid g2" style="margin-top:12px">
+<div class="card"><h3>Headline rates</h3><div class="cv"><canvas id="c_head"></canvas></div></div>
+<div class="card"><h3>Wrong auto-approvals (count, lower is better)</h3><div class="cv"><canvas id="c_wrong"></canvas></div></div>
+<div class="card"><h3>Critical-field exact match by document quality</h3><div class="cv"><canvas id="c_byq"></canvas></div></div>
+<div class="card"><h3>Field accuracy: OCR+regex vs LLM stand-in</h3><div class="cv"><canvas id="c_field"></canvas></div></div>
+</div>
+<div class="card" style="margin-top:12px"><h3>Injected-error handling</h3>
+<div class="ctl"><label>Metric <select id="catchm"><option value="routed">Routed to human review</option><option value="rule">Expected rule actually fired</option></select></label></div>
+<div class="cv" style="height:320px"><canvas id="c_catch"></canvas></div>
+<p class="note">A+ cannot fire line-based rules (V01, V03, V06) because regex extraction returns no line items: structured line extraction is where the AI adds value. C's near-perfect catch rate is partly by construction of the simulator; expect lower with a real extractor.</p></div>
+</section>
+
+<section id="s2">
+<div class="card"><h3>Human review queue (System C, lowest confidence first)</h3>
+<div class="ctl"><label>Filter by reason <select id="qf"></select></label><span id="qn" class="note"></span></div>
+<div class="wrap"><table id="qt"></table></div></div>
+</section>
+
+<section id="si">
+<div class="card"><h3>Invoice inspector: extracted JSON &rarr; rules &rarr; decision</h3>
+<div class="ctl"><label>System <select id="isys"><option value="C">C: LLM stand-in (simulated) + rules + router</option><option value="A">A+: OCR + regex (measured) + rules</option></select></label>
+<label>Show <select id="iflt"><option value="">all test invoices</option><option value="wrong">WRONG auto-approvals</option><option value="review">sent to review</option><option value="auto_approve">auto-approved</option></select></label>
+<label>Invoice <select id="isel"></select></label><span id="icount" class="note"></span></div>
+<div class="grid g2"><div><img id="ith" class="th" alt=""><p id="imeta" class="note"></p><b>Extracted JSON</b> <span class="note">(editable: change a value, then re-run)</span>
+<textarea id="ijson" rows="18" spellcheck="false"></textarea><p><button id="irun" class="btn">Re-run rules on this JSON</button></p><div id="iout"></div></div>
+<div><b>Printed on the document (ground truth)</b> <span class="note">(amber = differs from the JSON on the left)</span><pre id="igt"></pre></div></div>
+<p class="note">The rules run in your browser and are verified against the Python engine on every invoice (see tests). System C's extraction is a simulated stand-in; A+ is a real OCR measurement. The TIN registry is a mock.</p></div>
+</section>
+<section id="s3">
+<div class="grid g2">
+<div class="card"><h3>Inputs <span class="note">(assumptions unless noted)</span></h3><div id="sliders"></div>
+<p class="note" id="stpnote"></p></div>
+<div class="card"><h3>Result</h3><div class="grid k" id="roik"></div><div class="cv" style="margin-top:10px"><canvas id="c_roi"></canvas></div></div>
+</div>
+<p class="note">Model counts direct handling labour only (no systems, approvals, or overhead), so it is deliberately conservative versus published fully-loaded benchmarks. Penalty avoidance (RM200-RM20,000 per offence [VERIFY]) is excluded from the base case.</p>
+</section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const D=/*DATA*/null;
+const $=s=>document.querySelector(s),css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const pct=x=>x==null?'-':(x*100).toFixed(1)+'%',fmt=x=>x.toLocaleString('en-MY',{maximumFractionDigits:0});
+const TABS=['Overview & EDA','Evaluation','Review queue','Invoice inspector','ROI simulator'];let charts={},tab=0,roiV={...D.roi};
+const tabs=$('#tabs');TABS.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>show(i);tabs.append(b)});
+function show(i){tab=i;[...tabs.children].forEach((b,j)=>b.classList.toggle('on',i==j));document.querySelectorAll('section').forEach((s,j)=>s.classList.toggle('on',i==j));render()}
+function mk(id,cfg){if(charts[id])charts[id].destroy();const o=cfg.options=cfg.options||{};o.maintainAspectRatio=false;o.animation=false;
+ charts[id]=new Chart($('#'+id),cfg)}
+function pal(){return[css('--a'),css('--b'),css('--c'),css('--d'),css('--e')]}
+function base(extra){return Object.assign({plugins:{legend:{labels:{color:css('--ink')}}},scales:{x:{ticks:{color:css('--mute')},grid:{color:css('--line')}},y:{ticks:{color:css('--mute')},grid:{color:css('--line')}}}},extra||{})}
+const K=D.kpis;
+function overview(){
+ const items=[['Invoices',K.n],['Suppliers',K.suppliers],['Median value (RM)',fmt(K.median_myr)],['High-value (>=RM10k)',pct(K.pct_high_value)],['Arrive in last 5 days',pct(K.pct_month_end)],['Scanned or photo',pct(K.pct_scanned_photo)],['No MyInvois UIN',pct(K.pct_no_uin)],['With injected error',pct(K.pct_errors)]];
+ $('#kpis').innerHTML=items.map(([a,b])=>`<div class="card kpi"><b>${b}</b><span>${a}</span></div>`).join('');
+ const c=pal();
+ mk('c_month',{type:'bar',data:{labels:D.monthly.l,datasets:[{label:'Invoices',data:D.monthly.n,backgroundColor:c[0]}]},options:base({plugins:{legend:{display:false}}})});
+ mk('c_dom',{type:'bar',data:{labels:D.dom.map((_,i)=>i+1),datasets:[{label:'Invoices',data:D.dom,backgroundColor:D.dom.map((_,i)=>i>=25?c[2]:c[0])}]},options:base({plugins:{legend:{display:false}}})});
+ mk('c_val',{type:'bar',data:{labels:D.vhist.l,datasets:[{label:'Invoices',data:D.vhist.n,backgroundColor:c[1]}]},options:base({plugins:{legend:{display:false}},scales:{x:{ticks:{color:css('--mute'),maxRotation:60},grid:{display:false}},y:{ticks:{color:css('--mute')},grid:{color:css('--line')}}}})});
+ mk('c_err',{type:'bar',data:{labels:D.errs.l,datasets:[{label:'Invoices',data:D.errs.n,backgroundColor:c[3]}]},options:base({indexAxis:'y',plugins:{legend:{display:false}}})});
+ mk('c_q',{type:'doughnut',data:{labels:Object.keys(D.quality),datasets:[{data:Object.values(D.quality),backgroundColor:[c[0],c[2],c[3]],borderColor:css('--card')}]},options:{plugins:{legend:{labels:{color:css('--ink')}}}}});
+ mk('c_par',{type:'line',data:{labels:D.pareto.x,datasets:[{label:'Cumulative share',data:D.pareto.y,borderColor:c[4],pointRadius:2}]},options:base({plugins:{legend:{display:false}}})});
+ const top5=D.pareto.y[4],top10=D.pareto.y[9];
+ $('#ins').innerHTML=[`<b>${pct(K.pct_month_end)}</b> of invoices arrive in the last 5 days of the month (about 17% if evenly spread): a month-end crunch that the consolidation deadline (7 days after month-end during relaxation [VERIFY]) makes worse.`,
+ `The top 5 suppliers send <b>${pct(top5)}</b> of invoices and the top 10 send <b>${pct(top10)}</b>: supplier-specific templates and master data are worth investing in.`,
+ `<b>${pct(K.pct_high_value)}</b> are RM10,000 or more, the single-transaction threshold that cannot be consolidated [VERIFY]; they get mandatory human review by policy.`,
+ `<b>${pct(K.pct_no_uin)}</b> of documents carry no MyInvois UIN (assumed share of suppliers not yet e-invoicing), so self-billing / consolidation paths still matter during relaxation.`,
+ `<b>${pct(K.pct_scanned_photo)}</b> are scans or phone photos; <b>${K.n_value_unknown}</b> foreign-currency invoices have no exchange rate, so their RM value cannot even be computed.`].map(x=>`<li>${x}</li>`).join('')}
+function evaluation(){
+ const S=D.systems,c=pal();
+ $('#sys').innerHTML=`<tr><th>System</th><th>Basis</th><th class=num>Field acc.</th><th class=num>Critical exact</th><th class=num>STP</th><th class=num>STP on error-free docs</th><th class=num>Wrong auto-approve</th><th class=num>Errors sent to review</th></tr>`+
+ S.map(s=>`<tr><td>${s.label}</td><td><span class="badge ${s.simulated?'sim':'mea'}">${s.simulated?'simulated':'measured'}</span></td><td class=num>${pct(s.field_acc)}</td><td class=num>${pct(s.critical_exact)}</td><td class=num>${pct(s.stp)}</td><td class=num>${pct(s.stp_clean)}</td><td class="num ${s.wrong_auto_n>20?'bad':'good'}">${s.wrong_auto_n} (${pct(s.wrong_auto_rate)} of auto)</td><td class=num>${pct(s.err_routed)}</td></tr>`).join('');
+ const lab=S.map(s=>s.label.split('  ')[0]+(s.simulated?'*':''));
+ mk('c_head',{type:'bar',data:{labels:lab,datasets:[['Critical exact',s=>s.critical_exact],['STP',s=>s.stp],['Errors to review',s=>s.err_routed]].map(([n,f],i)=>({label:n,data:S.map(f),backgroundColor:c[i]}))},options:base({scales:{y:{max:1,ticks:{color:css('--mute'),callback:v=>v*100+'%'},grid:{color:css('--line')}},x:{ticks:{color:css('--mute')},grid:{display:false}}}})});
+ mk('c_wrong',{type:'bar',data:{labels:lab,datasets:[{label:'Wrong auto-approvals',data:S.map(s=>s.wrong_auto_n),backgroundColor:S.map(s=>s.wrong_auto_n>20?c[3]:c[1])}]},options:base({plugins:{legend:{display:false}}})});
+ const qs=['digital','scanned','photo'],pick=['A_ocr_regex','C_invoiceguard'];
+ mk('c_byq',{type:'bar',data:{labels:qs,datasets:pick.map((id,i)=>({label:id==='A_ocr_regex'?'A OCR+regex (measured)':'LLM stand-in (simulated)',data:qs.map(q=>D.acc_by_quality[id][q]),backgroundColor:i?c[2]:c[0]}))},options:base({scales:{y:{max:1,ticks:{color:css('--mute'),callback:v=>v*100+'%'},grid:{color:css('--line')}},x:{ticks:{color:css('--mute')},grid:{display:false}}}})});
+ mk('c_field',{type:'bar',data:{labels:D.fields,datasets:pick.map((id,i)=>({label:id==='A_ocr_regex'?'A OCR+regex':'LLM stand-in (sim)',data:D.field_acc[id],backgroundColor:i?c[2]:c[0]}))},options:base({scales:{y:{min:.5,max:1,ticks:{color:css('--mute'),callback:v=>v*100+'%'},grid:{color:css('--line')}},x:{ticks:{color:css('--mute'),maxRotation:50},grid:{display:false}}}})});
+ catchChart()}
+function catchChart(){const m=$('#catchm').value,c=pal(),ids=['A_ocr_regex','A+_ocr_regex_rules','C_invoiceguard'];
+ const src=m==='routed'?D.catch.routed:D.catch.rule;
+ mk('c_catch',{type:'bar',data:{labels:D.catch.errors,datasets:ids.map((id,i)=>({label:D.systems.find(s=>s.id===id).label,data:src[id],backgroundColor:[c[0],c[1],c[2]][i]}))},options:base({scales:{y:{max:1,ticks:{color:css('--mute'),callback:v=>v*100+'%'},grid:{color:css('--line')}},x:{ticks:{color:css('--mute'),maxRotation:40},grid:{display:false}}}})})}
+$('#catchm').onchange=catchChart;
+function queue(){const sel=$('#qf');if(!sel.options.length){sel.innerHTML='<option value="">All</option>'+[...new Set(D.queue.flatMap(q=>q.reasons))].sort().map(r=>`<option value="${r}">${r}${D.rules[r]?' - '+D.rules[r]:''}</option>`).join('');sel.onchange=queue}
+ const f=sel.value,rows=D.queue.filter(q=>!f||q.reasons.includes(f));$('#qn').textContent=rows.length+' invoices';
+ $('#qt').innerHTML='<tr><th>Invoice</th><th>Supplier</th><th class=num>RM</th><th>Quality</th><th>Why flagged</th><th>Ground truth</th><th class=num>Min conf.</th></tr>'+
+ rows.map(q=>`<tr><td>${q.id}</td><td>${q.supplier}</td><td class=num>${q.total==null?'?':fmt(q.total)}</td><td>${q.q}</td><td>${q.reasons.map(r=>`<span class="chip" title="${D.rules[r]||'Low model confidence'}">${r}</span>`).join('')}</td><td>${q.truth}</td><td class=num>${q.conf}</td></tr>`).join('')}
+const SL=[['volume','Invoices / month',50,5000,50,''],['handling_min','Manual min / invoice',2,20,.5,''],['hourly_cost','Staff cost RM/hour',10,60,1,''],['stp_rate','Straight-through rate',0,.95,.01,'%'],['exception_min','Exception min / invoice',1,12,.5,''],['implementation_cost','Build cost RM',5000,80000,1000,''],['fixed_monthly','Run cost RM/month',100,1500,10,'']];
+function roi(p){const base=p.handling_min+p.rework_rate*p.rework_min,auto=p.stp_rate*p.spotcheck_min+(1-p.stp_rate)*p.exception_min+p.new_rework_rate*p.rework_min,net=(base-auto)*p.hourly_cost/60-p.variable_cost;
+ return{base,auto,net,m:v=>v*net-p.fixed_monthly,be:net>0?p.fixed_monthly/net:null}}
+function sliders(){$('#sliders').innerHTML=SL.map(([k,l,a,b,s,u])=>`<div class="sl"><label>${l}</label><input type="range" min="${a}" max="${b}" step="${s}" value="${roiV[k]}" data-k="${k}"><output id="o_${k}"></output></div>`).join('');
+ document.querySelectorAll('#sliders input').forEach(i=>i.oninput=()=>{roiV[i.dataset.k]=+i.value;roiRender()});
+ const m=D.roi.measured_stp_clean;$('#stpnote').innerHTML=`Default STP = <b>${m==null?'n/a':pct(m)}</b>, the simulated rate on error-free documents (an assumed-parameter result, not a measurement). The planning assumption used elsewhere is 70%. Other defaults: manual 8 min, RM25/h, RM25k build, RM390/month run cost.`}
+function roiRender(){const p=roiV,r=roi(p);SL.forEach(([k,,,,,u])=>{$('#o_'+k).textContent=u==='%'?(p[k]*100).toFixed(0)+'%':fmt(p[k])});
+ const mo=r.m(p.volume),pb=mo>0?p.implementation_cost/mo:null;
+ $('#roik').innerHTML=[['Minutes saved / invoice',(r.base-r.auto).toFixed(2)],['Net RM saved / invoice',r.net.toFixed(2)],['Net benefit / month (RM)',fmt(mo)],['Net benefit / year (RM)',fmt(mo*12)],['Payback (months)',pb==null?'never':pb.toFixed(1)],['Break-even volume',r.be==null?'never':fmt(r.be)+' / mo']].map(([a,b])=>`<div class="card kpi"><b class="${mo<0&&a.includes('month (RM)')?'bad':''}">${b}</b><span>${a}</span></div>`).join('');
+ const xs=[...Array(31).keys()].map(i=>i*100),c=pal();
+ mk('c_roi',{type:'line',data:{labels:xs,datasets:[{label:'Net benefit / month (RM)',data:xs.map(r.m),borderColor:c[0],pointRadius:0},{label:'Zero',data:xs.map(()=>0),borderColor:css('--mute'),borderDash:[4,4],pointRadius:0},{label:'Your volume',data:xs.map(v=>Math.abs(v-Math.round(p.volume/100)*100)<1?r.m(p.volume):null),borderColor:c[3],backgroundColor:c[3],pointRadius:7,showLine:false}]},options:base({scales:{x:{title:{display:true,text:'Invoices / month',color:css('--mute')},ticks:{color:css('--mute')},grid:{display:false}},y:{ticks:{color:css('--mute')},grid:{color:css('--line')}}}})})}
+const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+// RULES-BEGIN
+const TAXT=['01','02','03','04','05','06','E'],CUR=['MYR','USD','SGD','EUR','GBP','CNY','JPY','THB','IDR','AUD'],nno=v=>String(v).toUpperCase().replace(/[^A-Z0-9]/g,'');
+function vrules(x,seen,tins,today){const o=[],add=(r,s,m)=>o.push({r,s,m}),n=v=>v==null||v===''?null:+v,T=0.011;
+ for(const f of ['invoice_number','issue_date','supplier_name','total','currency'])if(x[f]==null||x[f]==='')add('V00','error',f+' could not be read');
+ const L=x.lines,sub=n(x.subtotal),tax=n(x.tax_total),tot=n(x.total);
+ if(L){if(sub!=null&&L.length&&L.every(l=>n(l.line_total)!=null)&&Math.abs(L.reduce((a,l)=>a+n(l.line_total),0)-sub)>T)add('V01','error','sum of lines differs from subtotal');
+  for(const l of L){const q=n(l.quantity),u=n(l.unit_price),t=n(l.line_total);if(q!=null&&u!=null&&t!=null&&Math.abs(q*u-t)>T){add('V03','error','qty x unit price != line total');break}}
+  for(const l of L)if(l.tax_type&&!TAXT.includes(l.tax_type)){add('V06','error','tax type '+l.tax_type+' not in code list');break}}
+ if(sub!=null&&tax!=null&&tot!=null&&Math.abs(sub+tax-tot)>T)add('V02','error','subtotal + tax != total');
+ if(x.currency){if(!CUR.includes(x.currency))add('V04','error','unknown currency');else if(x.currency!=='MYR'&&!x.exchange_rate)add('V04','error','foreign currency without exchange rate')}
+ const tin=x.supplier_tin;if(!tin)add('V05','error','supplier TIN missing');else if(!/^C\d{10}$|^IG\d{11}$/.test(tin))add('V05','error','supplier TIN malformed');else if(!tins.includes(tin))add('V05','error','TIN not in registry (mock lookup)');
+ const m=tot!=null&&x.currency==='MYR'?tot:tot!=null&&x.exchange_rate?tot*+x.exchange_rate:null;if(m!=null&&m>=10000)add('V07','warning','>= RM10,000: individual e-invoice, cannot be consolidated');
+ if(x.invoice_number&&seen.has((tin||(x.supplier_name||'').toLowerCase())+'|'+nno(x.invoice_number)))add('V08','error','duplicate supplier + invoice number');
+ if(x.issue_date&&x.issue_date>today)add('V09','error','issue date is in the future');
+ if(String(x.supplier_id_type||'').toUpperCase()==='PASSPORT'&&String(x.supplier_id_value||'').length>12)add('V10','error','passport ID longer than 12 characters');
+ if(x.has_uin===false)add('V11','info','no MyInvois UIN on document');return o}
+function vdecide(o,x,useConf,thr){const rs=[...new Set(o.filter(f=>f.s!=='info').map(f=>f.r))].sort(),c=x.field_confidence&&Object.values(x.field_confidence);
+ if(useConf&&c&&c.length&&Math.min(...c)<thr)rs.push('LOW_CONF');return{dec:rs.length?'review':'auto_approve',rs}}
+// RULES-END
+function insp(){const I=D.insp,S=$('#isys').value,f=$('#iflt').value,sel=$('#isel');
+ const L=I.inv.filter(i=>!f||(f==='wrong'?i[S].dec==='auto_approve'&&i[S].wrong:i[S].dec===f));
+ const keep=sel.value;sel.innerHTML=L.map(i=>`<option value="${i.id}">${i.id} · ${i[S].dec==='review'?'review':'auto'}${i[S].wrong?' · WRONG':''}</option>`).join('');if(L.some(i=>i.id===keep))sel.value=keep;
+ $('#icount').textContent=L.length+' invoices';const cur=L.find(i=>i.id===sel.value);
+ if(!cur){$('#ijson').value='';$('#igt').textContent='';$('#iout').innerHTML='';$('#ith').removeAttribute('src');return}
+ $('#ith').src=cur.th?'data:image/jpeg;base64,'+cur.th:'';$('#ith').style.display=cur.th?'':'none';
+ $('#imeta').textContent=`${cur.sup} · quality: ${cur.q} · injected error(s): ${cur.inj.join(', ')||'none'}${cur.hv?' · high value':''}`;
+ $('#ijson').value=JSON.stringify(cur[S].ex,null,1);inspRun();inspGt()}
+function inspGt(){const cur=D.insp.inv.find(i=>i.id===$('#isel').value);if(!cur)return;
+ const have=new Set($('#ijson').value.split('\n').map(l=>l.trim()));
+ $('#igt').innerHTML=JSON.stringify(cur.gt,null,1).split('\n').map(l=>`<span class="${have.has(l.trim())?'':'dg'}">${esc(l)}</span>`).join('')}
+function inspRun(){const I=D.insp,S=$('#isys').value,cur=I.inv.find(i=>i.id===$('#isel').value);if(!cur)return;let x;
+ try{x=JSON.parse($('#ijson').value)}catch(e){$('#iout').innerHTML='<p class="bad">Not valid JSON: '+esc(e.message)+'</p>';return}
+ const o=vrules(x,new Set(I.keys[S].slice(0,cur.idx).filter(Boolean)),I.tins,I.today),d=vdecide(o,x,S==='C',I.thr),edited=JSON.stringify(x)!==JSON.stringify(cur[S].ex);
+ $('#iout').innerHTML=`<div class="card" style="margin-top:8px"><b class="${d.dec==='review'?'':'ok'}">${d.dec==='review'?'SEND TO HUMAN REVIEW':'AUTO-APPROVE'}</b> ${d.rs.map(r=>`<span class="chip" title="${esc(D.rules[r]||'Low model confidence')}">${r}</span>`).join('')}
+ ${o.length?o.map(f=>`<div>${f.s==='error'?'🟥':f.s==='warning'?'🟧':'ℹ️'} <b>${f.r}</b> ${esc(f.m)}</div>`).join(''):'<div class="ok">all rules passed</div>'}
+ <p class="note">${edited?'Recomputed in your browser from the edited JSON.':'Pipeline output for this invoice.'} ${cur[S].wrong&&!edited?'<span class="bad">Auto-approved although the extraction is wrong or the document should have gone to a human.</span>':''}</p></div>`;inspGt()}
+$('#isys').onchange=$('#iflt').onchange=$('#isel').onchange=insp;$('#irun').onclick=inspRun;$('#ijson').oninput=inspGt;
+function render(){if(typeof Chart==='undefined'){document.body.insertAdjacentHTML('afterbegin','<p style="padding:20px">Charts need internet access to load Chart.js from cdnjs.</p>');return}
+ [overview,evaluation,queue,insp,()=>{sliders();roiRender()}][tab]()}
+roiV.stp_rate=D.roi.measured_stp_clean??roiV.stp_rate;
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',render);
+show(0);
+</script>
+</body>
+</html>

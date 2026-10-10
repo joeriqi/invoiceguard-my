@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "Run full pipeline", "type": "shell", "command": "make all", "group": "build" },
+    { "label": "Generate data", "type": "shell", "command": "make data" },
+    { "label": "Evaluate", "type": "shell", "command": "make baseline && make eval" },
+    { "label": "Build static dashboard", "type": "shell", "command": "make dashboard" },
+    { "label": "Streamlit app", "type": "shell", "command": "make app", "isBackground": true },
+    { "label": "Tests", "type": "shell", "command": "make test", "group": "test" }
+  ]
+}

@@ -1,0 +1,15 @@
+# Rule catalogue. verify=true means the rule depends on a regulatory fact that must be
+# confirmed against LHDN guidelines / MyInvois SDK before relying on it.
+rules:
+  - {id: V00, name: Required field unreadable,                  severity: error,   verify: false}
+  - {id: V01, name: Sum of lines equals subtotal,               severity: error,   verify: false}
+  - {id: V02, name: Subtotal plus tax equals total,             severity: error,   verify: false}
+  - {id: V03, name: Line total equals qty x unit price,         severity: error,   verify: false}
+  - {id: V04, name: Valid currency; exchange rate if foreign,   severity: error,   verify: true}
+  - {id: V05, name: Supplier TIN present, well-formed, known,   severity: error,   verify: true}
+  - {id: V06, name: Tax type in official code list,             severity: error,   verify: true}
+  - {id: V07, name: Single transaction >= RM10,000,             severity: warning, verify: true}
+  - {id: V08, name: Duplicate invoice,                          severity: error,   verify: false}
+  - {id: V09, name: Issue date not in the future,               severity: error,   verify: false}
+  - {id: V10, name: Passport ID length <= 12,                   severity: error,   verify: true}
+  - {id: V11, name: No MyInvois UIN on document,                severity: info,    verify: true}

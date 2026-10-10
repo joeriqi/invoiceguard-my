@@ -1,0 +1,11 @@
+id,claim,number,source,url,date_accessed,source_type,confidence,verified_primary
+E01,Phase 4 relaxation period extended,31 Dec 2027 / enforcement 1 Jan 2028,Advisory/vendor sites citing LHDN Specific Guideline v4.7-v4.8,https://jomeinvoice.my/article/latest-malaysia-e-invoicing-faqs/,2026-10-09,secondary,medium,N
+E02,Single transaction >= RM10000 cannot be consolidated,RM10000,JomeInvoice penalty guide,https://jomeinvoice.my/article/lhdn-e-invoice-penalty-malaysia-what-sme-owners-must-know-in-2026/,2026-10-09,secondary,medium,N
+E03,Penalty range per offence,RM200-RM20000,AppAsia / JomeInvoice,https://www.appasia.com/e-invoicing-malaysia-lhdn-myinvois-guide/,2026-10-09,secondary,medium,N
+E04,Exemption threshold reportedly raised to RM3M,RM3M,LHDN,https://www.hasil.gov.my/en/e-invois/pelaksanaan-e-invois-di-malaysia/garis-masa-pelaksanaan-e-invois/,2026-10-09,secondary,medium,N
+E05,MyInvois validation change 24 Oct 2026 (amount >26 digits; passport >12 chars),24 Oct 2026,JomeInvoice FAQ relaying SDK update,https://jomeinvoice.my/article/latest-malaysia-e-invoicing-faqs/,2026-10-09,secondary,medium,N
+E06,MSMEs share of businesses / GDP,~96% / 39.7%,Bernama (DOSM via MECD minister),https://www.bernama.com/en/news.php?id=2588561,2026-10-09,news,high,N
+E07,Average invoice processing cost,USD 9.84,Ardent Partners State of ePayables 2025 (relayed),https://www.corpay.com/resources/blog/accounts-payable-automation,2026-10-09,vendor-relay,medium,N
+E08,APQC median cost per invoice,USD 5.83,APQC via CFO.com (relayed),https://www.corpay.com/resources/blog/accounts-payable-automation,2026-10-09,vendor-relay,medium,N
+E09,Native image input beats text-parsed pipelines for invoices,"87.46% vs 47.00% (scanned receipts, best models)",Berghaus et al. arXiv 2509.04469,https://arxiv.org/abs/2509.04469,2026-10-09,academic,high,N
+E10,Xero survey: 30% of SMEs fully understand e-invoicing,30%,WorldFirst relay of Xero survey,https://www.worldfirst.com/my/blog/global-business-tips/malaysia-e-invoicing/,2026-10-09,secondary,low,N

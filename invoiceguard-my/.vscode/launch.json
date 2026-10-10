@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    { "name": "CLI: run all stages", "type": "debugpy", "request": "launch", "module": "invoiceguard.cli",
+      "args": ["all"], "env": { "PYTHONPATH": "${workspaceFolder}/src" }, "console": "integratedTerminal" },
+    { "name": "Streamlit app", "type": "debugpy", "request": "launch", "module": "streamlit",
+      "args": ["run", "app/streamlit_app.py"], "env": { "PYTHONPATH": "${workspaceFolder}/src" }, "console": "integratedTerminal" },
+    { "name": "Pytest (current file)", "type": "debugpy", "request": "launch", "module": "pytest",
+      "args": ["${file}", "-q"], "env": { "PYTHONPATH": "${workspaceFolder}/src" }, "console": "integratedTerminal" }
+  ]
+}

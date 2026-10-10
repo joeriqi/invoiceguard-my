@@ -1,0 +1,14 @@
+pandas>=2.2
+numpy>=1.26
+pydantic>=2.7
+pyyaml>=6
+reportlab>=4.2
+pillow>=10
+pdfplumber>=0.11
+plotly>=5.22
+streamlit>=1.50
+anthropic>=0.40
+pytest>=8
+ruff>=0.5
+# installs this project itself (editable) so `python -m invoiceguard.cli ...` works from any folder, no PYTHONPATH needed
+-e .

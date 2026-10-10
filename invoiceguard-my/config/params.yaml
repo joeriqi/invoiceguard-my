@@ -1,0 +1,37 @@
+# All values here are ASSUMPTIONS unless noted. Edit and re-run `make all`.
+seed: 42
+n_invoices: 300
+dev_size: 50                      # prompts/regex are tuned on dev only; metrics reported on test only
+today: "2026-10-09"
+date_range: ["2026-01-02", "2026-09-30"]
+quality_mix: {digital: 0.60, scanned: 0.28, photo: 0.12}
+error_rate: 0.35                  # share of invoices with >=1 injected error
+duplicate_share: 0.03
+einvoice_capable_share: 0.70      # share of suppliers whose invoices carry a MyInvois UIN (assumption)
+foreign_supplier_share: 0.15
+
+# SIMULATED LLM stand-in (NOT a measurement). Replace by running the real extractor (README section 6).
+sim_llm:
+  field_error: {digital: 0.012, scanned: 0.035, photo: 0.07}   # base per-field error probability
+  alnum_multiplier: 2.5          # TIN / invoice number harder (cf. Berghaus et al. 2025, arXiv 2509.04469)
+  line_error: {digital: 0.015, scanned: 0.04, photo: 0.08}     # per line item
+  conf_ok: [20, 1.5]             # Beta(a,b) self-reported confidence when field is right
+  conf_bad: [5, 3]               # ...when field is wrong (uncalibrated, so some wrong fields look confident)
+
+router:
+  conf_threshold: 0.80
+  high_value_myr: 10000          # [VERIFY] RM10,000 single-transaction rule
+
+roi:                             # illustrative defaults, see docs
+  handling_min: 8.0
+  rework_rate: 0.05
+  rework_min: 20.0
+  hourly_cost: 25.0
+  stp_rate: 0.70
+  spotcheck_min: 0.5
+  exception_min: 4.0
+  new_rework_rate: 0.015
+  variable_cost: 0.10
+  fixed_monthly: 390.0
+  implementation_cost: 25000.0
+  volume: 1000

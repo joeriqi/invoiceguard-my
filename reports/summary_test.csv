@@ -1,0 +1,5 @@
+system,n,field_acc,critical_exact,stp_rate,wrong_auto_n,wrong_auto_of_auto,error_routed_to_review,expected_rule_fired,unneeded_review,stp_error_free_docs,acc_invoice_number,acc_issue_date,acc_supplier_tin,acc_currency,acc_total,acc_supplier_name,acc_subtotal,acc_tax_total
+A_ocr_regex,250,0.784,0.552,0.736,101,0.5489130434782609,0.3058823529411765,0.0,0.0,0.7318840579710145,0.748,0.832,0.704,0.868,0.756,0.876,0.688,0.8
+A+_ocr_regex_rules,250,0.784,0.552,0.392,15,0.15306122448979592,0.8470588235294118,0.5882352941176471,0.0,0.6159420289855072,0.748,0.832,0.704,0.868,0.756,0.876,0.688,0.8
+B_llm_only,250,0.9775,0.856,1.0,130,0.52,0.0,0.0,0.0,1.0,0.956,0.976,0.948,1.0,0.976,1.0,0.972,0.992
+C_invoiceguard,250,0.9775,0.856,0.332,1,0.012048192771084338,1.0,1.0,0.31666666666666665,0.6014492753623188,0.956,0.976,0.948,1.0,0.976,1.0,0.972,0.992

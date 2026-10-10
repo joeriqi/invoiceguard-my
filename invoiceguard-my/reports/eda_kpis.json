@@ -1,0 +1,15 @@
+{
+ "n": 300,
+ "suppliers": 38,
+ "value_myr": 1908599.6120000002,
+ "median_myr": 1420.2,
+ "pct_high_value": 0.14,
+ "n_value_unknown": 7,
+ "pct_errors": 0.35,
+ "pct_no_uin": 0.2866666666666667,
+ "pct_foreign": 0.12666666666666668,
+ "pct_scanned_photo": 0.42333333333333334,
+ "pct_month_end": 0.4666666666666667,
+ "mean_lines": 3.9966666666666666,
+ "pct_multi_page": 0.013333333333333334
+}
